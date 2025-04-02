@@ -19,13 +19,12 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install selenium requests python-dotenv  # 新增 python-dotenv 依赖
+          pip install selenium requests python-dotenv
 
       - name: Setup Chrome and ChromeDriver
         uses: browser-actions/setup-chrome@v1
         with:
           chrome-version: latest
-          chromedriver-version: latest
 
       - name: Run Coupon Bot
         env:
