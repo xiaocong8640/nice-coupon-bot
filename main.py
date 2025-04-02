@@ -1,3 +1,4 @@
+import traceback  # 新增导入
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -26,7 +27,6 @@ def auto_collect():
     try:
         # 登录页面
         driver.get('http://www.51ns.cn/nlogin')
-        # 显式等待用户名、密码输入框加载
         username = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, 'username'))
         )
@@ -35,7 +35,6 @@ def auto_collect():
         )
         username.send_keys(os.getenv('NS_USER'))
         password.send_keys(os.getenv('NS_PWD'))
-        # 定位并点击登录按钮
         driver.find_element(By.CSS_SELECTOR, 'button[onclick="login()"]').click()
 
         # 进入领券中心
@@ -58,7 +57,8 @@ def auto_collect():
         push_notification("奈斯数码领券结果", "\n".join(results))
 
     except Exception as e:
-        push_notification("领券任务失败", f"错误详情：{str(e)}")
+        error_detail = traceback.format_exc()  # 捕获完整异常堆栈
+        push_notification("领券任务失败", f"错误详情：{str(e)}\n完整堆栈：{error_detail}")
     finally:
         driver.quit()
 
