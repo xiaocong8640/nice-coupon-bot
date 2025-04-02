@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import requests
 import os
 
@@ -24,17 +26,27 @@ def auto_collect():
     try:
         # 登录页面
         driver.get('http://www.51ns.cn/nlogin')
-        username = driver.find_element(By.ID, 'username')
-        password = driver.find_element(By.ID, 'password')
+        # 显式等待用户名、密码输入框加载
+        username = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'username'))
+        )
+        password = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'password'))
+        )
         username.send_keys(os.getenv('NS_USER'))
         password.send_keys(os.getenv('NS_PWD'))
+        # 定位并点击登录按钮
         driver.find_element(By.CSS_SELECTOR, 'button[onclick="login()"]').click()
 
         # 进入领券中心
-        driver.find_element(By.XPATH, '//a[text()="领券中心"]').click()
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//a[text()="领券中心"]'))
+        ).click()
 
         # 领取所有优惠券
-        coupons = driver.find_elements(By.XPATH, '//button[contains(text(), "立即领取")]')
+        coupons = WebDriverWait(driver, 10).until(
+            EC.presence_of_all_elements_located((By.XPATH, '//button[contains(text(), "立即领取")]'))
+        )
         results = []
         for coupon in coupons:
             try:
