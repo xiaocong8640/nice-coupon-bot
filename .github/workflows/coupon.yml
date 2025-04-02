@@ -2,7 +2,7 @@ name: Coupon Collection
 
 on:
   schedule:
-    - cron: '0 10 * * 3'  # 每周三上午10点（北京时间）
+    - cron: '0 10 * * 3'  # 每周三上午 10 点（北京时间）
   workflow_dispatch:
 
 jobs:
@@ -19,17 +19,13 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install selenium requests python-dotenv
+          pip install selenium requests
 
-      - name: Set up Chrome
-        uses: google-github-actions/setup-chrome@v4
+      - name: Setup Chrome and ChromeDriver
+        uses: browser-actions/setup-chrome@v1
         with:
-          chrome-version: 'stable'
-
-      - name: Set up ChromeDriver
-        uses: actions/setup-chromedriver@v3
-        with:
-          chrome-version: 'stable'
+          chrome-version: latest
+          chromedriver-version: latest
 
       - name: Run Coupon Bot
         env:
