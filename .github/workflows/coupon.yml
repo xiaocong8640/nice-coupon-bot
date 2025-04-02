@@ -19,7 +19,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install selenium requests
+          pip install selenium requests python-dotenv  # 新增 python-dotenv 依赖
 
       - name: Setup Chrome and ChromeDriver
         uses: browser-actions/setup-chrome@v1
